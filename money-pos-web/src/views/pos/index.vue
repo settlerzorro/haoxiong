@@ -21,10 +21,10 @@
             <el-row :gutter="40" type="flex" class="row-bg" justify="space-between" align="middle">
               <el-col :xs="24" :sm="17" :md="19" :lg="20">
                 <el-row type="flex" class="row-bg">
-                  <el-autocomplete v-model="name" class="cashier-input-item" popper-class="cashier-input-item" :fetch-suggestions="queryGoods" placeholder="条码 or 名称" @select="item => name = item.name" @keydown.enter.native="enterName">
+                  <el-autocomplete v-model="name" class="cashier-input-item" popper-class="cashier-input-item" :fetch-suggestions="queryGoods" placeholder="条码 or 名称" @select="item => name = item.name" @keydown.enter.native="enterName" >
                     <template slot-scope="{ item }">
                       <span class="label">{{ item.name }}</span>
-                      <span class="desc">{{ item.name }} 🌰 {{ item.stock }}</span>
+                      <span class="desc">{{ item.brandName }} {{ item.name }} -库存- {{ item.stock }} {{ item.unit }}</span>
                     </template>
                   </el-autocomplete>
                 </el-row>
@@ -47,8 +47,8 @@
               </el-col>
             </el-row>
             <el-table ref="table" border :data="orderList" style="width: 100%;" fit row-key="goodsName">
-              <el-table-column v-if="!tool.simple" key="1" prop="goodsName" min-width="120" align="center" label="条码" />
               <el-table-column key="2" :fixed="tool.simple" prop="goodsName" min-width="120" align="center" label="商品" />
+              <el-table-column v-if="!tool.simple" key="1" prop="unit" min-width="120" align="center" label="单位" />
               <el-table-column key="3" prop="quantity" align="center" label="数量">
                 <template slot-scope="scope">
                   <el-input-number v-if="!tool.simple" v-model="scope.row.quantity" size="small" :min="0" @change="changeQuantity(scope.row)" />
@@ -64,11 +64,6 @@
                     </el-input>
                   </template>
                   <span v-else style="font-size: 16px">{{ scope.row.goodsPrice }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column key="8" prop="subcount" align="center" label="小计">
-                <template slot-scope="scope">
-                  <span style="font-size: 18px">{{ calculator.Mul(scope.row.quantity, scope.row.goodsPrice) }}</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -223,7 +218,8 @@ export default {
             quantity: 1,
             salePrice: goods.salePrice,
             coupon: goods.coupon,
-            goodsPrice: goods.salePrice
+            goodsPrice: goods.salePrice,
+            unit: goods.unit
           }
           this.orderList.push(orderDetail)
         } else {

@@ -31,11 +31,19 @@ public class PosServiceImpl implements PosService {
     private final OmsOrderService omsOrderService;
     private final OmsOrderDetailService omsOrderDetailService;
     private final OmsOrderLogService omsOrderLogService;
+    private final GmsBrandService gmsBrandService;
 
     @Override
-    public List<PosGoodsVO> listGoods(String barcode) {
-        List<GmsGoods> gmsGoodsList = gmsGoodsService.lambdaQuery().like(StrUtil.isNotBlank(barcode), GmsGoods::getName, barcode).list();
-        return BeanMapUtil.to(gmsGoodsList, PosGoodsVO::new);
+    public List<PosGoodsVO> listGoods(String name) {
+        List<GmsGoods> gmsGoodsList = gmsGoodsService.lambdaQuery().like(StrUtil.isNotBlank(name), GmsGoods::getName, name).list();
+        List<PosGoodsVO> pgo = BeanMapUtil.to(gmsGoodsList, PosGoodsVO::new);
+        for(PosGoodsVO goods : pgo){
+            GmsBrand brand = gmsBrandService.getById(goods.getBrandId());
+            if(brand != null){
+                goods.setBrandName(brand.getName());
+            }
+        }
+        return pgo;
     }
 
 //    @Override

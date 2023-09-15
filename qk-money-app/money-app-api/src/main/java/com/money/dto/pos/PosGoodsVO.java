@@ -1,6 +1,7 @@
 package com.money.dto.pos;
 
 import com.money.constant.GoodsStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -55,4 +56,10 @@ public class PosGoodsVO {
      * 状态
      */
     private GoodsStatus status;
+
+    private String unit;
+
+    private Long brandId;
+
+    private String brandName;
 }
