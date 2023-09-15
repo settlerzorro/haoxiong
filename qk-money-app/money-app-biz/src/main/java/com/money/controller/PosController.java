@@ -2,7 +2,6 @@ package com.money.controller;
 
 import com.money.dto.OmsOrder.OmsOrderVO;
 import com.money.dto.pos.PosGoodsVO;
-import com.money.dto.pos.PosMemberVO;
 import com.money.dto.pos.SettleAccountsDTO;
 import com.money.service.PosService;
 import io.swagger.v3.oas.annotations.Operation;

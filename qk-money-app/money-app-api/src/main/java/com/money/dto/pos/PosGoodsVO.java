@@ -38,16 +38,6 @@ public class PosGoodsVO {
     private BigDecimal salePrice;
 
     /**
-     * 会员价
-     */
-//    private BigDecimal vipPrice;
-
-    /**
-     * 用券
-     */
-//    private BigDecimal coupon;
-
-    /**
      * 库存
      */
     private Long stock;

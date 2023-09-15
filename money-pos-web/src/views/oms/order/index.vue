@@ -4,7 +4,6 @@
     <div v-if="crud.props.searchToggle" class="filter-container">
       <el-date-picker v-model="datePicker" class="filter-item" type="datetimerange" :picker-options="pickerOptions" value-format="yyyy-MM-dd HH:mm:ss" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right" style="margin-right:10px" />
       <el-input v-model="query.orderNo" placeholder="订单号" class="filter-item-200" @keyup.enter.native="crud.toQuery" />
-      <el-input v-model="query.member" placeholder="会员" class="filter-item-200" @keyup.enter.native="crud.toQuery" />
       <el-select v-model="query.status" clearable placeholder="状态" class="filter-item-200" @change="crud.toQuery">
         <el-option v-for="item in dict.orderStatus" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
@@ -15,23 +14,9 @@
     <!-- 订单列表 -->
     <el-table ref="table" v-loading="crud.loading" :summary-method="getSummaries" show-summary :data="crud.data" style="width: 100%" @selection-change="crud.selectionChangeHandler" @sort-change="crud.sortChangeHandler">
       <el-table-column align="center" width="200" prop="orderNo" label="订单号" />
-      <el-table-column align="center" prop="member" label="会员" />
-      <el-table-column align="center" width="150" prop="address" label="地址">
-        <template slot-scope="scope">
-          {{ scope.row.province + scope.row.city + scope.row.district }}
-          <el-tooltip v-if="scope.row.address" class="item" effect="light" :content="scope.row.address" placement="top-start">
-            <i class="el-icon-notebook-1" />
-          </el-tooltip>
-        </template>
-      </el-table-column>
       <el-table-column align="center" prop="costAmount" label="成本" />
       <el-table-column align="center" prop="totalAmount" label="总价" />
       <el-table-column align="center" prop="payAmount" label="实付款" />
-      <el-table-column align="center" prop="couponAmount" label="抵用券">
-        <template slot-scope="{ row }">
-          <span>{{ row.vip ? row.couponAmount : 0 }}</span>
-        </template>
-      </el-table-column>
       <el-table-column align="center" label="利润" prop="profit">
         <template slot-scope="{ row }">
           <span>{{ calculator.Sub(row.payAmount, row.costAmount) }}</span>

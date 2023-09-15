@@ -15,10 +15,6 @@ import java.util.List;
 @Data
 public class SettleAccountsDTO {
 
-    /**
-     * 会员
-     */
-//    private Long member;
 
     /**
      * 订单详情

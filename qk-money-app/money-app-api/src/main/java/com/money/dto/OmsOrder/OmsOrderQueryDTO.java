@@ -23,9 +23,6 @@ public class OmsOrderQueryDTO extends QueryRequest {
     @Schema(description="订单号")
     private String orderNo;
 
-//    @Schema(description="会员名")
-//    private String member;
-
     @Schema(description="状态")
     private String status;
 

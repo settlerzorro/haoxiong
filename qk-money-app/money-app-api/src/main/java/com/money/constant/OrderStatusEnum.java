@@ -13,11 +13,12 @@ public enum OrderStatusEnum {
      */
     PAID,
     /**
-     * 已完成
-     */
-    DONE,
-    /**
      * 退单
      */
-    RETURN;
+    RETURN,
+
+    /**
+     * 欠账
+     */
+    ARREARS;
 }

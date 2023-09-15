@@ -27,9 +27,6 @@ public class GmsGoods extends BaseEntity {
     @Schema(description="分类id")
     private Long categoryId;
 
-//    @Schema(description="条码")
-//    private String barcode;
-
     @Schema(description="商品名称")
     private String name;
 
@@ -54,12 +51,6 @@ public class GmsGoods extends BaseEntity {
     @Schema(description="售价")
     private BigDecimal salePrice;
 
-//    @Schema(description="会员价")
-//    private BigDecimal vipPrice;
-
-//    @Schema(description="用券")
-//    private BigDecimal coupon;
-
     @Schema(description="库存")
     private Long stock;
 
@@ -68,8 +59,5 @@ public class GmsGoods extends BaseEntity {
 
     @Schema(description="状态")
     private String status;
-
-//    @Schema(description="租户id")
-//    private Long tenantId;
 
 }

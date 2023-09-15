@@ -26,7 +26,4 @@ public class OmsOrderLog extends BaseEntity {
     @Schema(description="描述")
     private String description;
 
-//    @Schema(description="租户id")
-//    private Long tenantId;
-
 }

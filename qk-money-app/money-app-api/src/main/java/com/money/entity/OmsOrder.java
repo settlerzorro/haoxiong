@@ -25,32 +25,11 @@ public class OmsOrder extends BaseEntity {
     @Schema(description="订单号")
     private String orderNo;
 
-//    @Schema(description="会员名")
-//    private String member;
-//
-//    @Schema(description="会员id")
-//    private Long memberId;
-//
-//    @Schema(description="vip单")
-//    private Boolean vip;
-
     @Schema(description="状态")
     private String status;
 
     @Schema(description="联系方式")
     private String contact;
-
-//    @Schema(description="省份")
-//    private String province;
-//
-//    @Schema(description="城市")
-//    private String city;
-//
-//    @Schema(description="地区")
-//    private String district;
-//
-//    @Schema(description="详细地址")
-//    private String address;
 
     @Schema(description="总成本")
     private BigDecimal costAmount;
@@ -60,9 +39,6 @@ public class OmsOrder extends BaseEntity {
 
     @Schema(description="实付款")
     private BigDecimal payAmount;
-
-//    @Schema(description="抵用券")
-//    private BigDecimal couponAmount;
 
     @Schema(description="最终销售金额")
     private BigDecimal finalSalesAmount;
@@ -75,8 +51,5 @@ public class OmsOrder extends BaseEntity {
 
     @Schema(description="完成时间")
     private LocalDateTime completionTime;
-
-//    @Schema(description="租户id")
-//    private Long tenantId;
 
 }

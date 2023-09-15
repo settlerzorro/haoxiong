@@ -2,7 +2,6 @@ package com.money.service;
 
 import com.money.dto.OmsOrder.OmsOrderVO;
 import com.money.dto.pos.PosGoodsVO;
-import com.money.dto.pos.PosMemberVO;
 import com.money.dto.pos.SettleAccountsDTO;
 
 import java.util.List;
@@ -18,10 +17,10 @@ public interface PosService {
     /**
      * 列表商品
      *
-     * @param barcode 条形码
+     * @param name 条形码
      * @return {@link List}<{@link PosGoodsVO}>
      */
-    List<PosGoodsVO> listGoods(String barcode);
+    List<PosGoodsVO> listGoods(String name);
 
     /**
      * 查询成员

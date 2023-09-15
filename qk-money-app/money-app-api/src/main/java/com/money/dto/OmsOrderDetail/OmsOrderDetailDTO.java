@@ -31,9 +31,6 @@ public class OmsOrderDetailDTO {
     @Schema(description="商品id")
     private Long goodsId;
 
-//    @Schema(description="商品条码")
-//    private String goodsBarcode;
-
     @Schema(description="商品名称")
     private String goodsName;
 
@@ -48,12 +45,6 @@ public class OmsOrderDetailDTO {
 
     @Schema(description="进价")
     private BigDecimal purchasePrice;
-
-//    @Schema(description="会员价")
-//    private BigDecimal vipPrice;
-
-    @Schema(description="抵用券")
-    private BigDecimal coupon;
 
     @Schema(description="退货数量")
     private Integer returnQuantity;
