@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -167,6 +168,27 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderMapper, OmsOrder> i
         OmsOrderLog log = new OmsOrderLog();
         log.setOrderId(order.getId());
         log.setDescription("<span style=\"color:red\">退货</span>" + orderDetail.getGoodsName() + " X " + returnQty);
+        omsOrderLogService.save(log);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void arrearsAccount(Long id,ArrearsOrderDTO arrearsOrderDTO) {
+        // 修改订单
+        OmsOrder order = this.lambdaQuery().eq(OmsOrder::getId,id).one();
+        if(order.getArrearsAccount() != null){
+            order.setArrearsAccount(order.getArrearsAccount().add(arrearsOrderDTO.getArrearsAccount()));
+        }else{
+            order.setArrearsAccount(arrearsOrderDTO.getArrearsAccount());
+        }
+        if(Objects.equals(order.getArrearsAccount(), order.getPayAmount())){
+            order.setStatus(OrderStatusEnum.PAID.name());
+        }
+        this.updateById(order);
+        // 订单日志
+        OmsOrderLog log = new OmsOrderLog();
+        log.setOrderId(order.getId());
+        log.setDescription("<span style=\"color:red\">清账</span>" + arrearsOrderDTO.getArrearsAccount());
         omsOrderLogService.save(log);
     }
 

@@ -38,11 +38,17 @@ public class OmsOrderVO {
     @Schema(description="实付款")
     private BigDecimal payAmount;
 
+    @Schema(description="已还账")
+    private BigDecimal arrearsAmount;
+
     @Schema(description="最终销售金额")
     private BigDecimal finalSalesAmount;
 
     @Schema(description="备注")
     private String remark;
+
+    @Schema(description="已还账金额")
+    private BigDecimal arrearsAccount;
 
     @Schema(description="支付时间")
     private LocalDateTime paymentTime;

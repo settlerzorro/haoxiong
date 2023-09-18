@@ -18,34 +18,6 @@
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">
-            <i class="el-icon-user" />
-            会员名
-          </template>
-          {{ order.member }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-mobile-phone" />
-            联系方式
-          </template>
-          {{ member.phone }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-s-custom" />
-            会员类型
-          </template>
-          {{ dict.label.memberType[member.type] }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
-            <i class="el-icon-office-building" />
-            地址
-          </template>
-          {{ order.province + order.city + order.district }} <i v-if="order.address" class="el-icon-notebook-1" /> {{ order.address }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">
             <i class="el-icon-tickets" />
             备注
           </template>
@@ -56,12 +28,9 @@
       <div>
         <h4>商品信息</h4>
         <el-table row-key="id" :data="orderDetail" border style="width: 100%" :summary-method="getSummaries" show-summary>
-          <el-table-column prop="goodsBarcode" label="条码" align="center" />
           <el-table-column prop="goodsName" label="名称" align="center" />
           <el-table-column prop="quantity" label="数量" align="center" />
           <el-table-column prop="salePrice" label="售价" align="center" />
-          <el-table-column prop="vipPrice" label="会员价" align="center" />
-          <el-table-column prop="coupon" label="抵用券" align="center" />
           <el-table-column prop="goodsPrice" label="应收" align="center" />
           <el-table-column prop="subTotal" label="小计" align="center">
             <template slot-scope="{ row }">
@@ -85,12 +54,6 @@
         <el-descriptions-item>
           <template slot="label">优惠</template>
           {{ calculator.Sub(order.totalAmount, order.couponAmount) }}
-        </el-descriptions-item>
-        <el-descriptions-item>
-          <template slot="label">消耗抵用券</template>
-          <span>{{ order.couponAmount }}
-            <span v-if="returnCoupon > 0" class="note"> ( -{{ returnCoupon }} )</span>
-          </span>
         </el-descriptions-item>
         <el-descriptions-item>
           <template slot="label">支付</template>

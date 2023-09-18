@@ -1,11 +1,8 @@
 package com.money.controller;
 
+import com.money.common.dto.ValidGroup;
 import com.money.common.vo.PageVO;
-import com.money.dto.OmsOrder.OmsOrderQueryDTO;
-import com.money.dto.OmsOrder.OmsOrderVO;
-import com.money.dto.OmsOrder.OrderCountVO;
-import com.money.dto.OmsOrder.ReturnGoodsDTO;
-import com.money.dto.OmsOrder.OrderDetailVO;
+import com.money.dto.OmsOrder.*;
 import com.money.service.OmsOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -66,6 +63,13 @@ public class OmsOrderController {
     @PreAuthorize("@rbac.hasPermission('omsOrder:edit')")
     public void returnGoods(@Valid @RequestBody ReturnGoodsDTO returnGoodsDTO) {
         omsOrderService.returnGoods(returnGoodsDTO);
+    }
+
+    @Operation(summary = "清账")
+    @PutMapping("/{id}/arrearsAccount")
+    @PreAuthorize("@rbac.hasPermission('omsOrder:edit')")
+    public void arrearsAccount(@PathVariable Long id, @Validated(ValidGroup.Update.class) @RequestBody ArrearsOrderDTO arrearsOrderDTO) {
+        omsOrderService.arrearsAccount(id,arrearsOrderDTO);
     }
 
 }

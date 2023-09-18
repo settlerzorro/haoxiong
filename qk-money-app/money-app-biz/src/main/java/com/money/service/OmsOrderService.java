@@ -51,4 +51,11 @@ public interface OmsOrderService extends IService<OmsOrder> {
      */
     void returnGoods(ReturnGoodsDTO returnGoodsDTO);
 
+    /**
+     * 退货
+     *
+     * @param arrearsOrderDTO 返回商品dto
+     */
+    void arrearsAccount(Long id,ArrearsOrderDTO arrearsOrderDTO);
+
 }

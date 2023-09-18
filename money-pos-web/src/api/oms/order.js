@@ -31,5 +31,13 @@ export function returnGoods (data) {
   })
 }
 
-export default { count, getDetial, returnOrder, returnGoods }
+export function arrearsPart (data,id) {
+  return request({
+    url: '/oms/order/'+id+'/arrearsAccount',
+    method: 'put',
+    data
+  })
+}
+
+export default { count, getDetial, returnOrder, returnGoods, arrearsPart}
 
