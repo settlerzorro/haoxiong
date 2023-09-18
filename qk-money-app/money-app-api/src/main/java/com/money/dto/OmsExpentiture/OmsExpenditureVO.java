@@ -21,8 +21,8 @@ public class OmsExpenditureVO {
 
     private BigDecimal money;
 
-    private LocalDateTime expenditureTime;
-
     private String notes;
+
+    private LocalDateTime createTime;
 
 }

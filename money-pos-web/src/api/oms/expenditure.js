@@ -1,35 +1,29 @@
 import request from '@/api/request'
 
-export function count (params) {
+
+export function add(data) {
   return request({
-    url: `/oms/order/count`,
-    method: 'get',
-    params
+      url: '/oms/expenditure',
+      method: 'post',
+      data
   })
 }
 
-export function getDetial (id) {
+export function edit(data) {
   return request({
-    url: `/oms/order/detail?id=${id}`,
-    method: 'get'
-  })
+        url: '/oms/expenditure',
+        method: 'put',
+        data
+    })
 }
 
-export function returnOrder (data) {
+export function del(ids) {
   return request({
-    url: `/oms/order/returnOrder`,
+    url: '/oms/expenditure',
     method: 'delete',
-    data
+    data: ids
   })
 }
 
-export function returnGoods (data) {
-  return request({
-    url: `/oms/order/returnGoods`,
-    method: 'delete',
-    data
-  })
-}
-
-export default { count, getDetial, returnOrder, returnGoods }
+export default { add, edit, del }
 
