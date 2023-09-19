@@ -114,6 +114,27 @@
     <div style="display:none">
       <print-order ref="child" :is-pos="true" />
     </div>
+    <!--是否欠账弹窗-->
+    <el-dialog append-to-body :close-on-click-modal="false" :visible.sync="dialogA" title="是否欠账" width="380px">
+      <el-form ref="form" :inline="true" :model="form" size="small" label-width="80px">
+        <el-radio-group>
+          <el-radio v-model="radio" label="1">备选项1</el-radio>
+          <el-radio v-model="radio" label="2">备选项2</el-radio>
+        </el-radio-group>
+
+        <el-form-item label="已付金额" prop="quantity">
+          <el-input  style="width: 220px"/>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input  style="width: 220px" rows="6" type="textarea" maxlength="250" show-word-limit />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="text" @click="dialogA = false">取消</el-button>
+        <el-button @click="arrearsPartDialog(form)">确认</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -127,6 +148,8 @@ export default {
   components: { printOrder },
   data() {
     return {
+      radio: '1',
+      dialogA: false,
       isMobile: isMobile(),
       calculator: calculator,
 
@@ -262,38 +285,10 @@ export default {
     },
     // 结算
     settleAccounts() {
-      this.fullscreenLoading = true
-      const data = {
-        member: this.currentMember?.id,
-        orderDetail: this.orderList
-      }
-      posApi
-        .settleAccounts(data)
-        .then((res) => {
-          this.$notify({
-            title: 'Success',
-            message: '订单结算成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.showOrderDialog = false
-          const printOrderInfo = {
-            info: res.data,
-            detail: this.orderList.flatMap((o) => {
-              return [Object.assign({ key: Math.random() }, o), Object.assign({ key: Math.random() }, o)]
-            }),
-            member: Object.assign({}, this.currentMember)
-          }
-          this.settleAccountsOk()
-          this.fullscreenLoading = false
-          // 移动端不打印
-          if (!this.isMobile) {
-            this.$refs.child.print(printOrderInfo)
-          }
-        })
-        .catch(() => {
-          this.fullscreenLoading = false
-        })
+
+      this.dialogA = true;
+
+
     },
     // 结算成功，清理打印
     settleAccountsOk() {
