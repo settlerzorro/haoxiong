@@ -31,8 +31,6 @@ public class GmsGoodsDTO {
     @Schema(description = "分类id")
     private Long categoryId;
 
-//    @Schema(description = "条码")
-//    private String barcode;
 
     @Schema(description = "商品名称")
     private String name;
@@ -57,19 +55,11 @@ public class GmsGoodsDTO {
     @DecimalMin(value = "0", groups = {ValidGroup.Save.class, ValidGroup.Update.class})
     private BigDecimal salePrice;
 
-//    @Schema(description = "会员价")
-//    @DecimalMin(value = "0", groups = {ValidGroup.Save.class, ValidGroup.Update.class})
-//    private BigDecimal vipPrice;
-
-//    @Schema(description = "用券")
-//    @DecimalMin(value = "0", groups = {ValidGroup.Save.class, ValidGroup.Update.class})
-//    private BigDecimal coupon = BigDecimal.ZERO;
-
     @Schema(description = "库存")
     @Min(value = 0, groups = {ValidGroup.Save.class, ValidGroup.Update.class})
     private Long stock;
 
     @Schema(description = "状态")
-    private GoodsStatus status = GoodsStatus.SALE;
+    private String status = GoodsStatus.SALE.name();
 
 }

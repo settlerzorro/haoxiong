@@ -21,22 +21,13 @@
         <!-- 商品列表 -->
         <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @sort-change="crud.sortChangeHandler">
           <el-table-column align="center" type="selection" width="55" />
-          <el-table-column align="center" prop="pic" label="图片">
-            <template slot-scope="scope">
-              <el-image style="width: 45px; height: 45px" :src="loadPic(scope.row.pic)" :preview-src-list="[loadPic(scope.row.pic)]" />
-            </template>
-          </el-table-column>
           <el-table-column align="center" :show-overflow-tooltip="true" prop="brand" label="品牌">
             <template slot-scope="scope">
               {{ brands.label[scope.row.brandId] }}
             </template>
           </el-table-column>
           <el-table-column align="center" :show-overflow-tooltip="true" prop="name" label="名称" />
-          <el-table-column align="center" prop="status" label="状态">
-            <template slot-scope="scope">
-              <el-tag :type="typeColor(scope.row.status)">{{ dict.label.goodsStatus[scope.row.status] }}</el-tag>
-            </template>
-          </el-table-column>
+          <el-table-column align="center" prop="status" label="状态" :formatter="formatStatus"/>
           <el-table-column align="center" :show-overflow-tooltip="true" prop="salePrice" label="售价" />
           <el-table-column align="center" :show-overflow-tooltip="true" prop="purchasePrice" label="进价" />
           <el-table-column align="center" :show-overflow-tooltip="true" prop="stock" label="库存" />
@@ -64,13 +55,6 @@
     <!--表单渲染-->
     <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="620px">
       <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="80px">
-        <el-form-item label="图片" prop="pic">
-          <el-upload class="avatar-uploader" action="" :auto-upload="false" :on-change="handlePicSuccess" :show-file-list="false" accept="image/*">
-            <img v-if="form.pic" :src="loadPic(form.pic)" style="width: 100px; height: 100px">
-            <i v-else class="el-icon-plus" />
-          </el-upload>
-        </el-form-item>
-        <br>
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" style="width: 450px;" @keydown.native="keydown($event)" />
         </el-form-item>
@@ -147,8 +131,6 @@ export default {
   mixins: [presenter(), header(), form({
     // 表单初始值
     id: null,
-    pic: null,
-    picFile: null,
     status: 'SALE',
     brandId: 0,
     categoryId: 0,
@@ -259,22 +241,13 @@ export default {
       this.query.categoryId = val
       this.crud.toQuery()
     },
-    // 标记type
-    typeColor(status) {
-      switch (status) {
-        case 'SOLD_OUT': return 'warning'
-        case 'UN_SHELVE': return 'info'
-        default: return 'primary'
-      }
-    },
-    // 加载pic
-    loadPic(url) {
-      return oss.loadImage(url, oss.TYPE.LOCAL)
-    },
-    // 选择pic预览
-    handlePicSuccess(file) {
-      this.form.pic = URL.createObjectURL(file.raw)
-      this.form.picFile = file.raw
+
+    formatStatus(cellValue){
+        for(var i = 0;i<this.dict.goodsStatus.length;i++){
+          if(this.dict.goodsStatus[i].value == cellValue.status){
+            return this.dict.goodsStatus[i].label;
+          }
+        }
     },
     // 禁止输入空格
     keydown(e) {

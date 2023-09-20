@@ -46,16 +46,14 @@ public class GmsBrandController {
 
     @PostMapping
     @PreAuthorize("@rbac.hasPermission('gmsBrand:add')")
-    public void add(@Validated(ValidGroup.Save.class) @RequestPart("brand") GmsBrandDTO brandDTO,
-                         @RequestPart(required = false) MultipartFile logo) {
-        gmsBrandService.add(brandDTO, logo);
+    public void add(@Validated(ValidGroup.Save.class) @RequestPart("brand") GmsBrandDTO brandDTO) {
+        gmsBrandService.add(brandDTO);
     }
 
     @PutMapping
     @PreAuthorize("@rbac.hasPermission('gmsBrand:edit')")
-    public void update(@Validated(ValidGroup.Update.class) @RequestPart("brand") GmsBrandDTO brandDTO,
-                            @RequestPart(required = false) MultipartFile logo) {
-        gmsBrandService.update(brandDTO, logo);
+    public void update(@Validated(ValidGroup.Update.class) @RequestPart("brand") GmsBrandDTO brandDTO) {
+        gmsBrandService.update(brandDTO);
     }
 
     @DeleteMapping

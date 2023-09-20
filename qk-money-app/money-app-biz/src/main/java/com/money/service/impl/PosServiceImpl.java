@@ -34,7 +34,7 @@ public class PosServiceImpl implements PosService {
 
     @Override
     public List<PosGoodsVO> listGoods(String name) {
-        List<GmsGoods> gmsGoodsList = gmsGoodsService.lambdaQuery().like(StrUtil.isNotBlank(name), GmsGoods::getName, name).list();
+        List<GmsGoods> gmsGoodsList = gmsGoodsService.lambdaQuery().like(StrUtil.isNotBlank(name), GmsGoods::getName, name).gt(GmsGoods::getStock,0).list();
         List<PosGoodsVO> pgo = BeanMapUtil.to(gmsGoodsList, PosGoodsVO::new);
         for(PosGoodsVO goods : pgo){
             GmsBrand brand = gmsBrandService.getById(goods.getBrandId());

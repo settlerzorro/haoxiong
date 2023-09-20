@@ -49,35 +49,24 @@ public class GmsBrandServiceImpl extends ServiceImpl<GmsBrandMapper, GmsBrand> i
     }
 
     @Override
-    public void add(GmsBrandDTO addDTO, MultipartFile logo) {
+    public void add(GmsBrandDTO addDTO) {
         boolean exists = this.lambdaQuery().eq(GmsBrand::getName, addDTO.getName()).exists();
         if (exists) {
             throw new BaseException("品牌已存在");
         }
         GmsBrand gmsBrand = new GmsBrand();
         BeanUtil.copyProperties(addDTO, gmsBrand);
-        // 上传logo
-        if (logo != null) {
-            String logoUrl = localOSS.upload(logo, FolderPath.builder().cd("brand").build(), FileNameStrategy.TIMESTAMP);
-            gmsBrand.setLogo(logoUrl);
-        }
         this.save(gmsBrand);
     }
 
     @Override
-    public void update(GmsBrandDTO updateDTO, MultipartFile logo) {
+    public void update(GmsBrandDTO updateDTO) {
         boolean exists = this.lambdaQuery().ne(GmsBrand::getId, updateDTO.getId()).eq(GmsBrand::getName, updateDTO.getName()).exists();
         if (exists) {
             throw new BaseException("品牌已存在");
         }
         GmsBrand gmsBrand = this.getById(updateDTO.getId());
         BeanUtil.copyProperties(updateDTO, gmsBrand);
-        // 上传logo
-        if (logo != null) {
-            localOSS.delete(gmsBrand.getLogo());
-            String logoUrl = localOSS.upload(logo, FolderPath.builder().cd("brand").build(), FileNameStrategy.TIMESTAMP);
-            gmsBrand.setLogo(logoUrl);
-        }
         this.updateById(gmsBrand);
     }
 

@@ -23,9 +23,9 @@ public interface GmsGoodsService extends IService<GmsGoods> {
 
     PageVO<GmsGoodsVO> list(GmsGoodsQueryDTO queryDTO);
 
-    void add(GmsGoodsDTO addDTO, MultipartFile pic);
+    void add(GmsGoodsDTO addDTO);
 
-    void update(GmsGoodsDTO updateDTO, MultipartFile pic);
+    void update(GmsGoodsDTO updateDTO);
 
     void delete(Set<Long> ids);
 

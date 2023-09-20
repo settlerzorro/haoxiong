@@ -11,11 +11,6 @@
     <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
       <el-table-column type="selection" width="55" />
       <el-table-column :show-overflow-tooltip="true" prop="name" label="名称" />
-      <el-table-column prop="logo" label="logo">
-        <template slot-scope="scope">
-          <el-image style="width: 25px; height: 25px" :src="loadLogo(scope.row.logo)" :preview-src-list="[loadLogo(scope.row.logo)]" />
-        </template>
-      </el-table-column>
       <el-table-column :show-overflow-tooltip="true" prop="description" label="描述" />
       <el-table-column :show-overflow-tooltip="true" prop="goodsCount" label="商品数量" />
       <el-table-column label="操作" width="115" align="center" fixed="right">
@@ -31,12 +26,6 @@
       <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="80px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" style="width: 220px" @keydown.native="keydown($event)" />
-        </el-form-item>
-        <el-form-item label="logo" prop="logo">
-          <el-upload class="avatar-uploader" action="" :auto-upload="false" :on-change="handleLogoSuccess" :show-file-list="false" accept="image/*">
-            <img v-if="form.logo" :src="loadLogo(form.logo)" style="width: 50px; height: 50px">
-            <i v-else class="el-icon-plus" />
-          </el-upload>
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model.trim="form.description" style="width: 220px" rows="6" type="textarea" maxlength="250" show-word-limit />
@@ -71,9 +60,7 @@ export default {
     // 表单初始值
     id: null,
     name: null,
-    logo: null,
     description: null,
-    logoFile: null
   }), crud()],
   data() {
     return {
@@ -93,15 +80,6 @@ export default {
     }
   },
   methods: {
-    // 加载logo
-    loadLogo(url) {
-      return oss.loadImage(url, oss.TYPE.LOCAL)
-    },
-    // 选择logo预览
-    handleLogoSuccess(file) {
-      this.form.logo = URL.createObjectURL(file.raw)
-      this.form.logoFile = file.raw
-    },
     // 禁止输入空格
     keydown(e) {
       if (e.keyCode === 32) {

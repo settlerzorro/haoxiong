@@ -5,7 +5,6 @@ export function add(data) {
   formData.append('goods', new Blob([JSON.stringify(data)], {
     type: 'application/json'
   }))
-  formData.append('pic', data.picFile)
   return request({
     url: '/gms/goods',
     method: 'post',
@@ -19,7 +18,6 @@ export function edit(data) {
   formData.append('goods', new Blob([JSON.stringify(data)], {
     type: 'application/json'
   }))
-  formData.append('pic', data.picFile)
   return request({
     url: '/gms/goods',
     method: 'put',

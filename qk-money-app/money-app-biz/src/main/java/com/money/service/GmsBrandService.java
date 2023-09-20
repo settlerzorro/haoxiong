@@ -24,9 +24,9 @@ public interface GmsBrandService extends IService<GmsBrand> {
 
     PageVO<GmsBrandVO> list(GmsBrandQueryDTO queryDTO);
 
-    void add(GmsBrandDTO addDTO, MultipartFile logo);
+    void add(GmsBrandDTO addDTO);
 
-    void update(GmsBrandDTO updateDTO, MultipartFile logo);
+    void update(GmsBrandDTO updateDTO);
 
     void delete(Set<Long> ids);
 

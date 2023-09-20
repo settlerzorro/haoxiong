@@ -24,9 +24,6 @@ public class GmsGoodsQueryDTO extends QueryRequest {
     @Schema(description="分类id")
     private Long categoryId;
 
-//    @Schema(description="条码")
-//    private String barcode;
-
     @Schema(description="商品名称")
     private String name;
 

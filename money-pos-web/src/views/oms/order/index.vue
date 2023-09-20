@@ -141,15 +141,8 @@ export default {
       this.selectedRowId = null;
     },
     formatStatus(cellValue){
-        if (cellValue.status == 'PAID'){
-            return '已支付';
-        }else if (cellValue.status == 'RETURN'){
-            return '退单';
-        }else if (cellValue.status == 'ARREARS'){
-            return '欠账';
-        }else{
-          return '未知';
-        };
+      var status = cellValue.status;
+      return this.dict.label.orderStatus[status];
     },
     // 查询前操作
     [CRUD.HOOK.beforeRefresh]() {

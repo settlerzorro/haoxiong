@@ -12,7 +12,6 @@ export function add(data) {
   formData.append('brand', new Blob([JSON.stringify(data)], {
     type: 'application/json'
   }))
-  formData.append('logo', data.logoFile)
   return request({
     url: '/gms/brand',
     method: 'post',
@@ -26,7 +25,6 @@ export function edit(data) {
   formData.append('brand', new Blob([JSON.stringify(data)], {
     type: 'application/json'
   }))
-  formData.append('logo', data.logoFile)
   return request({
     url: '/gms/brand',
     method: 'put',

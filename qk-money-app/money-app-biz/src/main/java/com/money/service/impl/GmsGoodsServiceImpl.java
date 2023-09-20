@@ -69,18 +69,13 @@ public class GmsGoodsServiceImpl extends ServiceImpl<GmsGoodsMapper, GmsGoods> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(GmsGoodsDTO addDTO, MultipartFile pic) {
+    public void add(GmsGoodsDTO addDTO) {
         boolean exists = this.lambdaQuery().eq(GmsGoods::getName, addDTO.getName()).eq(GmsGoods::getUnit, addDTO.getUnit()).exists();
         if (exists) {
             throw new BaseException("名称已存在");
         }
         GmsGoods gmsGoods = new GmsGoods();
         BeanUtil.copyProperties(addDTO, gmsGoods);
-        // 上传图片
-        if (pic != null) {
-            String picUrl = localOSS.upload(pic, FolderPath.builder().cd("goods").build(), FileNameStrategy.TIMESTAMP);
-            gmsGoods.setPic(picUrl);
-        }
         // 更新商品数量
         gmsBrandService.updateGoodsCount(gmsGoods.getBrandId(), 1);
         gmsGoodsCategoryService.updateGoodsCount(gmsGoods.getCategoryId(), 1);
@@ -89,7 +84,7 @@ public class GmsGoodsServiceImpl extends ServiceImpl<GmsGoodsMapper, GmsGoods> i
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(GmsGoodsDTO updateDTO, MultipartFile pic) {
+    public void update(GmsGoodsDTO updateDTO) {
         boolean exists = this.lambdaQuery().ne(GmsGoods::getId, updateDTO.getId()).eq(GmsGoods::getName, updateDTO.getName()).eq(GmsGoods::getUnit, updateDTO.getUnit()).exists();
         if (exists) {
             throw new BaseException("名称已存在");
@@ -111,12 +106,8 @@ public class GmsGoodsServiceImpl extends ServiceImpl<GmsGoodsMapper, GmsGoods> i
         }
         if (GoodsStatus.SALE.name().equals(gmsGoods.getStatus()) && updateDTO.getStock() <= 0) {
             gmsGoods.setStatus(GoodsStatus.SOLD_OUT.name());
-        }
-        // 上传图片
-        if (pic != null) {
-            localOSS.delete(gmsGoods.getPic());
-            String picUrl = localOSS.upload(pic, FolderPath.builder().cd("goods").build(), FileNameStrategy.TIMESTAMP);
-            gmsGoods.setPic(picUrl);
+        }else{
+            gmsGoods.setStatus(updateDTO.getStatus());
         }
         this.updateById(gmsGoods);
     }

@@ -24,8 +24,8 @@ public class PosController {
     @Operation(summary = "商品列表")
     @GetMapping("/goods")
     @PreAuthorize("@rbac.hasPermission('pos:cashier')")
-    public List<PosGoodsVO> listGoods(String barcode) {
-        return posService.listGoods(barcode);
+    public List<PosGoodsVO> listGoods(String name) {
+        return posService.listGoods(name);
     }
 
     @Operation(summary = "收款")

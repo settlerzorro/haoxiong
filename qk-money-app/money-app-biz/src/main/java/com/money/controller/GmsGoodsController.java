@@ -42,17 +42,15 @@ public class GmsGoodsController {
     @Operation(summary = "添加")
     @PostMapping
     @PreAuthorize("@rbac.hasPermission('gmsGoods:add')")
-    public void add(@Validated(ValidGroup.Save.class) @RequestPart("goods") GmsGoodsDTO addDTO,
-                    @RequestPart(required = false) MultipartFile pic) {
-        gmsGoodsService.add(addDTO, pic);
+    public void add(@Validated(ValidGroup.Save.class) @RequestPart("goods") GmsGoodsDTO addDTO) {
+        gmsGoodsService.add(addDTO);
     }
 
     @Operation(summary = "修改")
     @PutMapping
     @PreAuthorize("@rbac.hasPermission('gmsGoods:edit')")
-    public void update(@Validated(ValidGroup.Update.class) @RequestPart("goods") GmsGoodsDTO updateDTO,
-                       @RequestPart(required = false) MultipartFile pic) {
-        gmsGoodsService.update(updateDTO, pic);
+    public void update(@Validated(ValidGroup.Update.class) @RequestPart("goods") GmsGoodsDTO updateDTO) {
+        gmsGoodsService.update(updateDTO);
     }
 
     @Operation(summary = "删除")
