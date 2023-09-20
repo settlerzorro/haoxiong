@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.money.common.util.BeanMapUtil;
 import com.money.constant.OrderStatusEnum;
 import com.money.dto.OmsOrder.OmsOrderVO;
+import com.money.dto.OmsOrderDetail.OmsOrderArrearsVO;
 import com.money.dto.OmsOrderDetail.OmsOrderDetailDTO;
 import com.money.dto.pos.PosGoodsVO;
 import com.money.dto.pos.SettleAccountsDTO;
@@ -44,13 +45,6 @@ public class PosServiceImpl implements PosService {
         return pgo;
     }
 
-//    @Override
-//    public List<PosMemberVO> listMember(String member) {
-//        List<UmsMember> memberList = umsMemberService.lambdaQuery().eq(UmsMember::getDeleted, false)
-//                .like(StrUtil.isNotBlank(member), UmsMember::getName, member).list();
-//        return BeanMapUtil.to(memberList, PosMemberVO::new);
-//    }
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public OmsOrderVO settleAccounts(SettleAccountsDTO settleAccountsDTO) {
@@ -59,62 +53,44 @@ public class PosServiceImpl implements PosService {
         order.setOrderNo(orderNo);
         // 核算订单
         List<OmsOrderDetailDTO> orderDetailDTOS = settleAccountsDTO.getOrderDetail();
+        OmsOrderArrearsVO arrearsVO = settleAccountsDTO.getArrearsVo();
         List<OmsOrderDetail> orderDetails = orderDetailDTOS.stream().map(dto -> {
             GmsGoods goods = gmsGoodsService.getById(dto.getGoodsId());
             OmsOrderDetail detail = new OmsOrderDetail();
             detail.setOrderNo(orderNo);
             detail.setStatus(OrderStatusEnum.PAID.name());
             detail.setGoodsId(goods.getId());
-            //detail.setGoodsBarcode(goods.getBarcode());
             detail.setGoodsName(goods.getName());
             detail.setSalePrice(goods.getSalePrice());
             detail.setPurchasePrice(goods.getPurchasePrice());
-            //detail.setVipPrice(goods.getVipPrice());
-            //detail.setCoupon(goods.getCoupon());
-
             detail.setGoodsPrice(dto.getGoodsPrice());
             detail.setQuantity(dto.getQuantity());
             return detail;
         }).collect(Collectors.toList());
         this.aggOrder(order, orderDetails);
-        // 会员处理
-//        order.setVip(false);
-//        Long memberId = settleAccountsDTO.getMember();
-//        UmsMember member = umsMemberService.getById(memberId);
-//        if (member != null) {
-//            order.setMember(member.getName());
-//            order.setMemberId(memberId);
-//            order.setVip(true);
-//            order.setContact(member.getPhone());
-//            order.setProvince(member.getProvince());
-//            order.setCity(member.getCity());
-//            order.setDistrict(member.getDistrict());
-//            order.setAddress(member.getAddress());
-//            // 核算抵用券
-//            BigDecimal couponAmount = order.getCouponAmount();
-//            BigDecimal consumeCoupon = member.getCoupon().subtract(couponAmount);
-//            if (consumeCoupon.compareTo(BigDecimal.ZERO) < 0) {
-//                throw new BaseException("抵扣券不足");
-//            }
-//        } else if (memberId != null) {
-//            throw new BaseException("未找到该会员");
-//        }
-        order.setStatus(OrderStatusEnum.PAID.name());
+        //欠账
+        if(arrearsVO.getStatus().equals(OrderStatusEnum.ARREARS.name())){
+            order.setArrearsAccount(arrearsVO.getArrearsAccount());
+            order.setRemark(arrearsVO.getRemark());
+            order.setStatus(OrderStatusEnum.ARREARS.name());
+        }else{
+            order.setStatus(OrderStatusEnum.PAID.name());
+        }
         order.setPaymentTime(LocalDateTime.now());
-
         // 保存订单
         omsOrderService.save(order);
         omsOrderDetailService.saveBatch(orderDetails);
         // 扣库存
         orderDetails.forEach(omsOrderDetail -> gmsGoodsService.sell(omsOrderDetail.getGoodsId(), omsOrderDetail.getQuantity()));
-        // 会员消费
-//        if (member != null) {
-//            umsMemberService.consume(member.getId(), order.getPayAmount(), order.getCouponAmount());
-//        }
         // 订单日志
         OmsOrderLog log = new OmsOrderLog();
         log.setOrderId(order.getId());
-        log.setDescription("完成订单");
+        if(order.getStatus().equals(OrderStatusEnum.ARREARS.name())){
+            log.setDescription("完成订单,订单状态：" + "欠账." + "还款金额 " + order.getArrearsAccount());
+        }else{
+            log.setDescription("完成订单,订单状态：" + "结清.");
+        }
+
         omsOrderLogService.saveBatch(ListUtil.of(log));
         return BeanMapUtil.to(order, OmsOrderVO::new);
     }

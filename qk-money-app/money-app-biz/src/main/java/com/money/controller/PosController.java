@@ -28,13 +28,6 @@ public class PosController {
         return posService.listGoods(barcode);
     }
 
-//    @Operation(summary = "会员列表")
-//    @GetMapping("/members")
-//    @PreAuthorize("@rbac.hasPermission('pos:cashier')")
-//    public List<PosMemberVO> listMember(String member) {
-//        return posService.listMember(member);
-//    }
-
     @Operation(summary = "收款")
     @PostMapping("/settleAccounts")
     @PreAuthorize("@rbac.hasPermission('pos:cashier')")

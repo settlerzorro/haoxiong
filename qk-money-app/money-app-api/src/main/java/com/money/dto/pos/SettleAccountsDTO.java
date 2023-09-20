@@ -1,5 +1,6 @@
 package com.money.dto.pos;
 
+import com.money.dto.OmsOrderDetail.OmsOrderArrearsVO;
 import com.money.dto.OmsOrderDetail.OmsOrderDetailDTO;
 import lombok.Data;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @Data
 public class SettleAccountsDTO {
 
-
+    private OmsOrderArrearsVO arrearsVo;
     /**
      * 订单详情
      */

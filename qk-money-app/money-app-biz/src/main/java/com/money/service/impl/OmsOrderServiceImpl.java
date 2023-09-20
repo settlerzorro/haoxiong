@@ -188,7 +188,12 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderMapper, OmsOrder> i
         // 订单日志
         OmsOrderLog log = new OmsOrderLog();
         log.setOrderId(order.getId());
-        log.setDescription("<span style=\"color:red\">清账</span>" + arrearsOrderDTO.getArrearsAccount());
+        if(order.getStatus().equals(OrderStatusEnum.ARREARS.name())){
+            log.setDescription("<span style=\"color:red\">还款：</span>" + arrearsOrderDTO.getArrearsAccount() + ".共还款：" + order.getArrearsAccount());
+        }else{
+            log.setDescription("<span style=\"color:red\">已清账.还款：</span>" + arrearsOrderDTO.getArrearsAccount() + ".共还款：" + order.getArrearsAccount());
+        }
+
         omsOrderLogService.save(log);
     }
 

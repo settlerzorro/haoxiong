@@ -28,10 +28,10 @@
     <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="380px">
       <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="80px">
         <el-form-item label="原因" prop="reason">
-          <el-input v-model="form.reason" style="width: 220px" @keydown.native="keydown($event)" />
+          <el-input v-model="form.reason" style="width: 220px"/>
         </el-form-item>
         <el-form-item label="支出金额" prop="money">
-          <el-input v-model="form.money" style="width: 220px" @keydown.native="keydown($event)" />
+          <el-input v-model="form.money" style="width: 220px" />
         </el-form-item>
         <el-form-item label="描述" prop="notes">
           <el-input v-model.trim="form.notes" style="width: 220px" rows="6" type="textarea" maxlength="250" show-word-limit />

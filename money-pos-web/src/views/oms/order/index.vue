@@ -24,11 +24,11 @@
       </el-table-column>
       <el-table-column align="center" prop="status" label="状态" :formatter="formatStatus">
       </el-table-column>
+      <el-table-column align="center" prop="arrearsAccount" label="还账" />
       <el-table-column align="center" width="180" prop="createTime" label="创建时间" />
       <el-table-column align="center" width="180" prop="paymentTime" label="支付时间" />
       <el-table-column align="center" width="180" prop="completionTime" label="完成时间" />
       <el-table-column align="center" prop="remark" label="备注" />
-      <el-table-column align="center" prop="arrearsAccount" label="还账" />
       <el-table-column align="center" prop="settleAccountRemark" label="清账备注" />
       <el-table-column label="操作" width="200" align="center" fixed="right">
         <template slot-scope="{ row }">

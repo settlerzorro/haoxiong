@@ -8,7 +8,7 @@
             <el-button plain @click="reload">刷新</el-button>
             <el-button plain :type="tool.editPrice ? 'success' : ''" @click="editPrice">修改价格</el-button>
             <el-button plain @click="clearOrderList">清空商品</el-button>
-            <el-button v-if="isMobile" type="success" @click="showOrder">收款</el-button>
+            <el-button type="success" @click="showOrder">收款</el-button>
             <el-button v-if="isMobile" plain :type="tool.simple ? 'success' : ''" @click="tool.simple = !tool.simple">精简</el-button>
           </div>
         </el-card>
@@ -21,7 +21,7 @@
             <el-row :gutter="40" type="flex" class="row-bg" justify="space-between" align="middle">
               <el-col :xs="24" :sm="17" :md="19" :lg="20">
                 <el-row type="flex" class="row-bg">
-                  <el-autocomplete v-model="name" class="cashier-input-item" popper-class="cashier-input-item" :fetch-suggestions="queryGoods" placeholder="条码 or 名称" @select="item => name = item.name" @keydown.enter.native="enterName" >
+                  <el-autocomplete v-model="name" class="cashier-input-item" popper-class="cashier-input-item" :fetch-suggestions="queryGoods" placeholder="名称" @select="item => name = item.name" @keydown.enter.native="enterName" >
                     <template slot-scope="{ item }">
                       <span class="label">{{ item.name }}</span>
                       <span class="desc">{{ item.brandName }} {{ item.name }} -库存- {{ item.stock }} {{ item.unit }}</span>
@@ -32,7 +32,6 @@
               <el-col :xs="0" :sm="7" :md="5" :lg="4">
                 <el-button type="success" style="width:100%;height:100%" @click="showOrder">
                   <h1>收款</h1>
-                  <h4>（空格space）</h4>
                 </el-button>
               </el-col>
             </el-row>
@@ -107,7 +106,7 @@
       </el-row>
       <div slot="footer" class="dialog-footer">
         <el-button @click="showOrderDialog = false"> 取消 </el-button>
-        <el-button type="primary" @click="settleAccounts()"> 提交 </el-button>
+        <el-button type="primary" @click="arrearsPartDialog()"> 提交 </el-button>
       </div>
     </el-dialog>
 
@@ -117,21 +116,21 @@
     <!--是否欠账弹窗-->
     <el-dialog append-to-body :close-on-click-modal="false" :visible.sync="dialogA" title="是否欠账" width="380px">
       <el-form ref="form" :inline="true" :model="form" size="small" label-width="80px">
-        <el-radio-group>
-          <el-radio v-model="radio" label="1">备选项1</el-radio>
-          <el-radio v-model="radio" label="2">备选项2</el-radio>
+        <el-radio-group v-model="form.status" @change="handleRadioChange">
+          <el-radio v-model="form.radio" label="ARREARS">欠账</el-radio>
+          <el-radio v-model="form.radio" label="PAID">结清</el-radio>
         </el-radio-group>
 
-        <el-form-item label="已付金额" prop="quantity">
-          <el-input  style="width: 220px"/>
+        <el-form-item label="已付金额" prop="arrearsAccount">
+          <el-input v-model="form.arrearsAccount" style="width: 220px" :disabled="disableInputs"/>
         </el-form-item>
-        <el-form-item label="备注">
-          <el-input  style="width: 220px" rows="6" type="textarea" maxlength="250" show-word-limit />
+        <el-form-item label="备注" prop="remark">
+          <el-input  v-model="form.remark" style="width: 220px" rows="6" :disabled="disableInputs" type="textarea" maxlength="250" show-word-limit />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="text" @click="dialogA = false">取消</el-button>
-        <el-button @click="arrearsPartDialog(form)">确认</el-button>
+        <el-button @click="settleAccounts(form)">确认</el-button>
       </div>
     </el-dialog>
 
@@ -148,7 +147,8 @@ export default {
   components: { printOrder },
   data() {
     return {
-      radio: '1',
+      form:{arrearsAccount:0,status:'PAID'},
+      disableInputs: true,
       dialogA: false,
       isMobile: isMobile(),
       calculator: calculator,
@@ -190,15 +190,6 @@ export default {
   },
   created() {
     this.tool.simple = this.isMobile
-    // 空格收银
-    const that = this
-    document.onkeydown = function (e) {
-      const key = window.event.keyCode
-      if (key === 32) {
-        e.preventDefault()
-        that.showOrder()
-      }
-    }
     // 初始化
     this.loadInit()
   },
@@ -208,23 +199,23 @@ export default {
       posApi.listGoods(this.name).then((res) => {
         this.goodsList = res.data
       })
-     // posApi.listMember(this.member).then((res) => {
-     //   this.memberList = res.data
-     // })
     },
+    //点击欠款和结清单选框切换
+    handleRadioChange() {
+      if (this.form.status === 'PAID') {
+        this.form.arrearsAccount  = 0;
+        this.form.remark  = '';
+        this.disableInputs = true;
+      } else {
+        this.disableInputs = false;
+      }
+    },
+
     // 查询商品
     queryGoods(name, cb) {
       let result = this.goodsList
       if (name) {
         result = this.goodsList.filter((e) => e.name.includes(name) || e.name.includes(name))
-      }
-      cb(result.length > 10 ? [] : result)
-    },
-    // 查询会员
-    queryMember(nameOrPhone, cb) {
-      let result = this.memberList
-      if (nameOrPhone) {
-        result = this.memberList.filter((e) => e.name.includes(nameOrPhone) || e.phone.includes(nameOrPhone))
       }
       cb(result.length > 10 ? [] : result)
     },
@@ -240,7 +231,6 @@ export default {
             goodsName: goods.name,
             quantity: 1,
             salePrice: goods.salePrice,
-            coupon: goods.coupon,
             goodsPrice: goods.salePrice,
             unit: goods.unit
           }
@@ -283,12 +273,45 @@ export default {
         }
       }
     },
-    // 结算
-    settleAccounts() {
-
+    //提交订单
+    settleAccounts(form) {
+      const data = {
+        member: this.currentMember?.id,
+        orderDetail: this.orderList,
+        arrearsVo: form
+      }
+      posApi
+        .settleAccounts(data)
+        .then((res) => {
+          this.$notify({
+            title: 'Success',
+            message: '订单结算成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.dialogA = false;
+          this.showOrderDialog = false
+          const printOrderInfo = {
+            info: res.data,
+            detail: this.orderList.flatMap((o) => {
+              return [Object.assign({ key: Math.random() }, o), Object.assign({ key: Math.random() }, o)]
+            }),
+            member: Object.assign({}, this.currentMember)
+          }
+          this.settleAccountsOk()
+          this.fullscreenLoading = false
+          // 移动端不打印
+          if (!this.isMobile) {
+            this.$refs.child.print(printOrderInfo)
+          }
+        })
+        .catch(() => {
+          this.fullscreenLoading = false
+        })
+    },
+    // 展示欠款弹窗
+    arrearsPartDialog() {
       this.dialogA = true;
-
-
     },
     // 结算成功，清理打印
     settleAccountsOk() {

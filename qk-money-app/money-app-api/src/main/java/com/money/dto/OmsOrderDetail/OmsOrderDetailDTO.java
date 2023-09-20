@@ -49,4 +49,10 @@ public class OmsOrderDetailDTO {
     @Schema(description="退货数量")
     private Integer returnQuantity;
 
+    @Schema(description="备注")
+    private String remark;
+
+    @Schema(description="已还账金额")
+    private BigDecimal arrearsAccount;
+
 }
