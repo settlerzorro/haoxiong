@@ -32,4 +32,15 @@ public class OrderCountVO {
      * 利润
      */
     private BigDecimal profit;
+
+    /**
+     * 支出
+     */
+    private BigDecimal expenditureCount;
+
+    /**
+     * 利润（包含支出）
+     */
+    private BigDecimal profitWithExpenditure;
+
 }

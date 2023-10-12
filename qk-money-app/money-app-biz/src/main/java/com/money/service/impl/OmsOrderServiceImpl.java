@@ -10,7 +10,7 @@ import com.money.constant.OrderStatusEnum;
 import com.money.dto.OmsOrder.*;
 import com.money.dto.OmsOrderDetail.OmsOrderDetailVO;
 import com.money.dto.OmsOrderLog.OmsOrderLogVO;
-//import com.money.dto.UmsMember.UmsMemberVO;
+import com.money.entity.OmsExpenditure;
 import com.money.entity.OmsOrder;
 import com.money.entity.OmsOrderDetail;
 import com.money.entity.OmsOrderLog;
@@ -18,6 +18,7 @@ import com.money.mapper.OmsOrderMapper;
 import com.money.service.*;
 import com.money.util.PageUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,10 +41,10 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderMapper, OmsOrder> implements OmsOrderService {
 
-//    private final UmsMemberService umsMemberService;
     private final GmsGoodsService gmsGoodsService;
     private final OmsOrderDetailService omsOrderDetailService;
     private final OmsOrderLogService omsOrderLogService;
+    private final ExpenditureService expenditureService;
 
     @Override
     public PageVO<OmsOrderVO> list(OmsOrderQueryDTO queryDTO) {
@@ -81,13 +82,21 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderMapper, OmsOrder> i
             saleCount = saleCount.add(omsOrderDetail.getGoodsPrice().multiply(new BigDecimal(quantity)));
             costCount = costCount.add(omsOrderDetail.getPurchasePrice().multiply(new BigDecimal(quantity)));
         }
+        // 4.计算支出
+        BigDecimal expenditureCount = BigDecimal.ZERO;
+        List<OmsExpenditure> omsExpenditures = getOmsExpenditures(startTime,endTime);
+        long expenditureTotal = omsExpenditures.stream().filter(x -> StringUtils.isNotEmpty(x.getMoney())).mapToLong(k -> Long.parseLong(k.getMoney())).sum();
+        expenditureCount = new BigDecimal(expenditureTotal);
         // 4.返回 VO
         OrderCountVO vo = new OrderCountVO();
         vo.setOrderCount(count);
         vo.setSaleCount(saleCount);
         vo.setCostCount(costCount);
+        vo.setExpenditureCount(expenditureCount);
         // 销售额 - 成本 = 利润
         vo.setProfit(saleCount.subtract(costCount));
+        //计算包含支出的利润
+        vo.setProfitWithExpenditure(saleCount.subtract(costCount).subtract(expenditureCount));
         return vo;
     }
 
@@ -195,6 +204,10 @@ public class OmsOrderServiceImpl extends ServiceImpl<OmsOrderMapper, OmsOrder> i
         }
 
         omsOrderLogService.save(log);
+    }
+
+    private List<OmsExpenditure> getOmsExpenditures(LocalDateTime startTime, LocalDateTime endTime){
+        return expenditureService.get(startTime,endTime);
     }
 
 }

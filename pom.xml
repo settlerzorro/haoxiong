@@ -105,4 +105,44 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <configuration>
+                        <!-- 指定输出目录 -->
+                        <outputDirectory>D:\test</outputDirectory>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+<!--                <plugin>-->
+<!--                    <groupId>org.apache.maven.plugins</groupId>-->
+<!--                    <artifactId>maven-dependency-plugin</artifactId>-->
+<!--                    <version>${spring-boot.version}</version> &lt;!&ndash; 请根据需要指定版本 &ndash;&gt;-->
+<!--                    <executions>-->
+<!--                        <execution>-->
+<!--                            <id>copy-dependencies</id>-->
+<!--                            <phase>package</phase>-->
+<!--                            <goals>-->
+<!--                                <goal>copy-dependencies</goal>-->
+<!--                            </goals>-->
+<!--                            <configuration>-->
+<!--                                &lt;!&ndash; 指定输出目录 &ndash;&gt;-->
+<!--                                <outputDirectory>D:\test</outputDirectory>-->
+<!--                            </configuration>-->
+<!--                        </execution>-->
+<!--                    </executions>-->
+<!--                </plugin>-->
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

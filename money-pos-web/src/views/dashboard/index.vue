@@ -28,11 +28,33 @@
           <el-col :xs="12" :sm="6" style="padding-top: 10px;">
             <el-card shadow class="box-card">
               <div slot="header" class="clearfix">
+                <span>{{ tab.label }}支出</span>
+              </div>
+              <el-row type="flex" justify="space-between" align="center">
+                <img src="../../../public/sale.png" width="45" height="35">
+                <count-to :start-val="0" :decimals="2" :end-val="homeCount[tab.name].expenditureCount" :duration="2200" class="card-panel-num" />
+              </el-row>
+            </el-card>
+          </el-col>
+          <el-col :xs="12" :sm="6" style="padding-top: 10px;">
+            <el-card shadow class="box-card">
+              <div slot="header" class="clearfix">
                 <span>{{ tab.label }}利润</span>
               </div>
               <el-row type="flex" justify="space-between" align="center">
                 <img src="../../../public/profit.png" width="45" height="35">
                 <count-to :start-val="0" :decimals="2" :end-val="homeCount[tab.name].profit" :duration="2200" class="card-panel-num" />
+              </el-row>
+            </el-card>
+          </el-col>
+          <el-col :xs="12" :sm="6" style="padding-top: 10px;">
+            <el-card shadow class="box-card">
+              <div slot="header" class="clearfix">
+                <span>{{ tab.label }}利润（包含支出）</span>
+              </div>
+              <el-row type="flex" justify="space-between" align="center">
+                <img src="../../../public/profit.png" width="45" height="35">
+                <count-to :start-val="0" :decimals="2" :end-val="homeCount[tab.name].profitWithExpenditure" :duration="2200" class="card-panel-num" />
               </el-row>
             </el-card>
           </el-col>

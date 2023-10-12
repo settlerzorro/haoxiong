@@ -5,20 +5,6 @@
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
-      <template v-if="device!=='mobile'">
-        <!-- 搜索框 -->
-        <el-tooltip content="Search" effect="dark" placement="bottom">
-          <search id="header-search" class="right-menu-item" />
-        </el-tooltip>
-        <!-- 全屏 -->
-        <el-tooltip content="Full Screen" effect="dark" placement="bottom">
-          <screenfull id="screenfull" class="right-menu-item hover-effect" />
-        </el-tooltip>
-        <!-- 全局文字大小 -->
-        <el-tooltip content="Global Size" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
-      </template>
       <!-- 个人栏 -->
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
@@ -32,9 +18,6 @@
           <router-link to="/changePassword">
             <el-dropdown-item>修改密码</el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://github.com/ycf1998">
-            <el-dropdown-item>Github</el-dropdown-item>
-          </a>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">注销</span>
           </el-dropdown-item>

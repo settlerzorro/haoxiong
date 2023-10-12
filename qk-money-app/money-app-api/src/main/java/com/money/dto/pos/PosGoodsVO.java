@@ -45,7 +45,7 @@ public class PosGoodsVO {
     /**
      * 状态
      */
-    private GoodsStatus status;
+    private String status;
 
     private String unit;
 

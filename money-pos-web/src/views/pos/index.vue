@@ -302,7 +302,7 @@ export default {
           this.fullscreenLoading = false
           // 移动端不打印
           if (!this.isMobile) {
-            this.$refs.child.print(printOrderInfo)
+            //this.$refs.child.print(printOrderInfo)
           }
         })
         .catch(() => {

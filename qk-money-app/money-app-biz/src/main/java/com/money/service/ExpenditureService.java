@@ -1,15 +1,10 @@
 package com.money.service;
 
 import com.money.common.vo.PageVO;
-import com.money.dto.GmsBrand.GmsBrandDTO;
 import com.money.dto.OmsExpentiture.OmsExpenditureQueryDTO;
 import com.money.dto.OmsExpentiture.OmsExpenditureVO;
-import com.money.dto.OmsOrder.OmsOrderQueryDTO;
-import com.money.dto.OmsOrder.OmsOrderVO;
-import com.money.dto.OmsOrder.OrderCountVO;
 import com.money.dto.pos.PosGoodsVO;
-import com.money.dto.pos.SettleAccountsDTO;
-import org.springframework.web.multipart.MultipartFile;
+import com.money.entity.OmsExpenditure;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,6 +25,8 @@ public interface ExpenditureService {
      * @return {@link List}<{@link PosGoodsVO}>
      */
     PageVO<OmsExpenditureVO> listExpenditure(OmsExpenditureQueryDTO queryDTO);
+
+    List<OmsExpenditure> get(LocalDateTime startTime, LocalDateTime endTime);
 
     void add(OmsExpenditureVO addDTO);
 

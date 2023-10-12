@@ -2,7 +2,7 @@ const config = {
   // 前端开发模式
   dev: false,
   // 标题
-  title: 'QK-Money',
+  title: '豪雄商贸',
   // 语言
   lang: 'zh-cn',
   // 时区

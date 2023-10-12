@@ -20,6 +20,7 @@ import com.money.vo.AuthTokenVO;
 import com.money.vo.UserInfoVO;
 import com.money.vo.VueRouterVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
  * @description : 系统身份验证服务impl
  * @createTime : 2023-05-23 22:59:18
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SysAuthServiceImpl implements SysAuthService {
@@ -91,6 +93,7 @@ public class SysAuthServiceImpl implements SysAuthService {
 
     @Override
     public AuthTokenVO login(LoginDTO loginDto) {
+        log.error("login-------------------------------{}",loginDto);
         SysUser sysUser = sysUserService.getByUsername(loginDto.getUsername());
         if (sysUser == null || !passwordEncoder.matches(loginDto.getPassword(), sysUser.getPassword())) {
             throw new BaseException(SysErrorStatus.USER_NOT_FOUND);
